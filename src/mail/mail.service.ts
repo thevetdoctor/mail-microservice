@@ -6,6 +6,7 @@ import {
   KafkaTopics,
   mailPort,
   mailSMtpServer,
+  mailTemplates,
 } from 'src/utils';
 import * as dotenv from 'dotenv';
 import { ProducerService } from 'src/kafka/producer/producer.service';
@@ -27,17 +28,20 @@ export class MailService {
     });
   }
 
-  async sendEmail(to: string, subject: string, text: string, topic: string) {
+  async sendEmail(msg: any, topic: string) {
+    const { email, clientIp, deviceInfo } = msg;
+    const { subject, text, html } = mailTemplates(topic, clientIp, deviceInfo);
     await this.kafkaProducer.sendMessage(KafkaTopics.MAIL_SENT, {
-      email: to,
+      email,
       topic,
     });
-    console.log('\n', `Email sent to ${to} by topic: ${topic}`, '\n');
+    console.log('\n', `Email sent to ${email} by topic: ${topic}`, '\n');
     return this.transporter.sendMail({
       from: process.env.EMAIL_USER,
-      to,
+      to: email,
       subject,
       text,
+      html
     });
   }
 }

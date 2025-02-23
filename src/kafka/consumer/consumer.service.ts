@@ -1,7 +1,7 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { Kafka } from 'kafkajs';
 import { MailService } from 'src/mail/mail.service';
-import { KafkaTopics, kafkaUrl, mailTemplates } from 'src/utils';
+import { KafkaTopics, kafkaUrl } from 'src/utils';
 
 @Injectable()
 export class ConsumerService implements OnModuleInit {
@@ -23,9 +23,7 @@ export class ConsumerService implements OnModuleInit {
           const msg = JSON.parse(message.value.toString());
           console.log('\n', `🚀 Event Received: ${topic}`, msg, '\n');
           await this.mailService.sendEmail(
-            msg.email,
-            mailTemplates(topic, msg.clientIp).subject,
-            mailTemplates(topic, msg.clientIp).text,
+            msg,
             topic,
           );
         } catch (e) {
