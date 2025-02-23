@@ -24,8 +24,8 @@ export class ConsumerService implements OnModuleInit {
           console.log('\n', `🚀 Event Received: ${topic}`, msg, '\n');
           await this.mailService.sendEmail(
             msg.email,
-            mailTemplates[topic].subject,
-            mailTemplates[topic].text,
+            mailTemplates(topic, msg.clientIp).subject,
+            mailTemplates(topic, msg.clientIp).text,
             topic,
           );
         } catch (e) {
