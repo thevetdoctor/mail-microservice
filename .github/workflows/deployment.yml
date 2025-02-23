@@ -32,22 +32,19 @@ jobs:
           push: true
           tags: 85958/mail-microservice:latest
 
-      # - name: Deployment
-      #   uses: appleboy/ssh-action@master
-      #   with:
-      #     host: ${{ secrets.SSH_HOST }}
-      #     username: ${{ secrets.SSH_USER }}
-      #     key: ${{ secrets.SSH_KEY }}
-      #     passphrase: ${{ secrets.SSH_PASSPHRASE }}
-      #     script: |
-      #       cd ~/
-      #       docker-compose -f docker-compose-ussd.yml pull ussd_service
-      #       docker-compose -f docker-compose-ussd.yml up -d
-      #       exit
+      - name: Deployment
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          passphrase: ${{ secrets.SSH_PASSPHRASE }}
+          script: |
+            cd ~/
+            docker-compose -f docker-compose-microservice.yml pull mail-microservice
+            docker-compose -f docker-compose-microservice.yml up -d
+            exit
 
-   notify:
-    runs-on: ubuntu-latest
-    steps:
       - name: Send Email Notification
         uses: dawidd6/action-send-mail@v3
         with:
