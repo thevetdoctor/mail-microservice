@@ -42,7 +42,7 @@ jobs:
           script: |
             cd ~/
             docker-compose -f docker-compose-microservice.yml pull mail-microservice
-            docker rm -f mail-microservice
+            docker-compose -f docker-compose-microservice.yml down mail-microservice
             docker-compose -f docker-compose-microservice.yml up -d
             exit
 
