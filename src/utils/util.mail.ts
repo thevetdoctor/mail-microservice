@@ -24,7 +24,7 @@ export const mailTemplates = (
       return {
         subject: '🚨 High Login Error Alert!',
         text: `More than ${MAX_ERRORS} failed login attempts detected within a short time.\n Location: ${clientIp} \n Device: ${deviceInfo}`,
-        // html: htmlLoginTemplate(clientIp, deviceInfo),
+        html: htmlAlertTemplate(clientIp, deviceInfo),
       };
 
     default:
@@ -158,6 +158,90 @@ const htmlLoginTemplate = (clientIp: string, deviceInfo: string) => `
     <div class="footer">
       &copy; 2025 Your Company. All rights reserved.
     </div>
+  </div>
+</body>
+</html>
+`;
+
+const htmlAlertTemplate = (clientIp: string, deviceInfo: string) => `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🚨 High Login Error Alert!</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 600px;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      margin: auto;
+    }
+    .header {
+      background-color: #d9534f;
+      color: #fff;
+      text-align: center;
+      padding: 15px;
+      font-size: 20px;
+      font-weight: bold;
+      border-radius: 8px 8px 0 0;
+    }
+    .content {
+      padding: 20px;
+      font-size: 16px;
+      color: #333;
+    }
+    .footer {
+      font-size: 14px;
+      text-align: center;
+      margin-top: 20px;
+      color: #777;
+    }
+    .alert {
+      font-size: 18px;
+      font-weight: bold;
+      color: #d9534f;
+    }
+    .details {
+      background: #f8d7da;
+      padding: 10px;
+      border-radius: 5px;
+      margin-top: 10px;
+    }
+    .button {
+      display: inline-block;
+      padding: 10px 15px;
+      background: #d9534f;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">🚨 High Login Error Alert!</div>
+    <div class="content">
+      <p class="alert">Security Alert: Multiple Failed Login Attempts</p>
+      <p>We have detected <strong>more than ${MAX_ERRORS} failed login attempts</strong> on your account within a short period.</p>
+      <div class="details">
+        <p><strong>Location:</strong> ${clientIp}</p>
+        <p><strong>Device:</strong> ${deviceInfo}</p>
+        <p><strong>Time:</strong> ${loginTime}</p>
+      </div>
+      <p>If this wasn't you, we recommend securing your account immediately.</p>
+      <a href="{{resetPasswordLink}}" class="button">Reset Password</a>
+    </div>
+    <div class="footer">If you did not attempt to log in, please ignore this email.</div>
   </div>
 </body>
 </html>
