@@ -32,6 +32,11 @@ export const mailSMtpServer = process.env.MAIL_SMTP_SERVER ?? 'smtp.gmail.com';
 export const mailPort = process.env.MAIL_PORT ?? '';
 export const emailUser = process.env.EMAIL_USER ?? '';
 export const emailPass = process.env.EMAIL_PASS ?? '';
+export const MAX_ERRORS = 10;
+export const adminEmail = process.env.ADMIN_EMAIL ?? 'thevetdoctor@gmail.com';
+export const errorTimeLimit = process.env.ERROR_TIME_LIMIT
+  ? Number(process.env.ERROR_TIME_LIMIT)
+  : 60000;
 
 export enum AppRole {
   ADMIN = 'admin',
@@ -48,6 +53,7 @@ export enum KafkaTopics {
   MAIL_SENT = 'mail.sent',
   USER_LOGIN = 'user.login',
   USER_LOGIN_ERROR = 'user.login.error',
+  USER_LOGIN_ERROR_ALERT = 'user.login.error.alert',
   USER_SIGNUP = 'user.signup',
   USER_SIGNUP_ERROR = 'user.signup.error',
 }

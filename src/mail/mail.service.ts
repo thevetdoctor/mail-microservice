@@ -41,7 +41,7 @@ export class MailService {
       to: email,
       subject,
       text,
-      html
+      html,
     });
   }
 }

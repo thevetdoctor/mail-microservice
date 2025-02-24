@@ -1,10 +1,16 @@
-export const mailTemplates = (topic: string, clientIp: string, deviceInfo: string) => {
+import { MAX_ERRORS } from './util.constant';
+
+export const mailTemplates = (
+  topic: string,
+  clientIp: string,
+  deviceInfo: string,
+) => {
   switch (topic) {
     case 'user.signup':
       return {
         subject: 'User Signup',
         text: `Your account has been created successfully! \n Location: ${clientIp}`,
-        html: htmlTemplate(clientIp, "https://softafrik.com", deviceInfo),
+        html: htmlTemplate(clientIp, 'https://softafrik.com', deviceInfo),
       };
 
     case 'user.login':
@@ -12,6 +18,13 @@ export const mailTemplates = (topic: string, clientIp: string, deviceInfo: strin
         subject: 'User Login',
         text: `Your account has been logged into successfully! \n Location: ${clientIp}`,
         html: htmlLoginTemplate(clientIp, deviceInfo),
+      };
+
+    case 'user.login.error.alert':
+      return {
+        subject: '🚨 High Login Error Alert!',
+        text: `More than ${MAX_ERRORS} failed login attempts detected within a short time.\n Location: ${clientIp} \n Device: ${deviceInfo}`,
+        // html: htmlLoginTemplate(clientIp, deviceInfo),
       };
 
     default:
@@ -22,7 +35,11 @@ export const mailTemplates = (topic: string, clientIp: string, deviceInfo: strin
   }
 };
 
-const htmlTemplate = (clientIp: string, verifyLink: string, deviceInfo: string) => `
+const htmlTemplate = (
+  clientIp: string,
+  verifyLink: string,
+  deviceInfo: string,
+) => `
 <!DOCTYPE html>
 <html>
 <head>
