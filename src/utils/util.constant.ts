@@ -19,24 +19,23 @@ export const PASSWORD_MAX_LENGTH = 16;
 
 // ENV Variables
 export const appName = process.env.APP_NAME ?? 'MAIL_MICROSERVICE';
-export const kafkaUrl = process.env.KAFKA_URL
-  ? process.env.KAFKA_URL
-  : '104.248.162.129:9092';
-export const jwtSecret = process.env.JWT_SECRET
-  ? process.env.JWT_SECRET
-  : 'auth-microservice-secret-key';
+export const kafkaUrl = process.env.KAFKA_URL ?? '104.248.162.129:9092';
+export const jwtSecret = process.env.JWT_SECRET ?? 'auth-microservice-secret-key';
 export const expiryDuration = process.env.JWT_DURATION_EXPIRY
   ? String(process.env.JWT_DURATION_EXPIRY)
   : '1h';
+export const redirectUrl = process.env.REDIRECT_URL ?? 'https://softafrik.com';
 export const mailSMtpServer = process.env.MAIL_SMTP_SERVER ?? 'smtp.gmail.com';
-export const mailPort = process.env.MAIL_PORT ?? '';
-export const emailUser = process.env.EMAIL_USER ?? '';
-export const emailPass = process.env.EMAIL_PASS ?? '';
-export const MAX_ERRORS = 10;
+export const mailPort = process.env.MAIL_PORT ?? 'Not Supplied';
+export const emailUser = process.env.EMAIL_USER ?? 'Not Supplied';
+export const emailPass = process.env.EMAIL_PASS ?? 'Not Supplied';
 export const adminEmail = process.env.ADMIN_EMAIL ?? 'thevetdoctor@gmail.com';
 export const errorTimeLimit = process.env.ERROR_TIME_LIMIT
   ? Number(process.env.ERROR_TIME_LIMIT)
   : 60000;
+export const MAX_ERRORS = process.env.MAX_ERRORS
+  ? Number(process.env.ERROR_TIME_LIMIT)
+  : 10;
 
 export enum AppRole {
   ADMIN = 'admin',

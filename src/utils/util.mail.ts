@@ -1,4 +1,5 @@
-import { MAX_ERRORS } from './util.constant';
+import { MAX_ERRORS, redirectUrl } from './util.constant';
+const loginTime = new Date().toLocaleString();
 
 export const mailTemplates = (
   topic: string,
@@ -10,7 +11,7 @@ export const mailTemplates = (
       return {
         subject: 'User Signup',
         text: `Your account has been created successfully! \n Location: ${clientIp}`,
-        html: htmlTemplate(clientIp, 'https://softafrik.com', deviceInfo),
+        html: htmlTemplate(clientIp, redirectUrl, deviceInfo),
       };
 
     case 'user.login':
@@ -109,8 +110,6 @@ const htmlTemplate = (
 </html>
 `;
 
-const loginTime = new Date().toLocaleString();
-
 const htmlLoginTemplate = (clientIp: string, deviceInfo: string) => `
 <!DOCTYPE html>
 <html>
@@ -154,7 +153,7 @@ const htmlLoginTemplate = (clientIp: string, deviceInfo: string) => `
     <p><strong>Location:</strong> ${clientIp}</p>
     <p><strong>Time:</strong> ${loginTime}</p>
     <p><strong>Device:</strong> ${deviceInfo}</p>
-    <p>If this wasn't you, please <a href="https://softafrik.com">reset your password</a> immediately.</p>
+    <p>If this wasn't you, please <a href=${redirectUrl}>reset your password</a> immediately.</p>
     <div class="footer">
       &copy; 2025 Your Company. All rights reserved.
     </div>
@@ -239,7 +238,7 @@ const htmlAlertTemplate = (clientIp: string, deviceInfo: string) => `
         <p><strong>Time:</strong> ${loginTime}</p>
       </div>
       <p>If this wasn't you, we recommend securing your account immediately.</p>
-      <a href="{{resetPasswordLink}}" class="button">Reset Password</a>
+      <a href=${redirectUrl} class="button">Reset Password</a>
     </div>
     <div class="footer">If you did not attempt to log in, please ignore this email.</div>
   </div>
