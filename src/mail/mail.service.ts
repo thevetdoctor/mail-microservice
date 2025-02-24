@@ -29,8 +29,13 @@ export class MailService {
   }
 
   async sendEmail(msg: any, topic: string) {
-    const { email, clientIp, deviceInfo } = msg;
-    const { subject, text, html } = mailTemplates(topic, clientIp, deviceInfo);
+    const { email, clientIp, deviceInfo, currentTime } = msg;
+    const { subject, text, html } = mailTemplates(
+      topic,
+      clientIp,
+      deviceInfo,
+      currentTime,
+    );
     await this.kafkaProducer.sendMessage(KafkaTopics.MAIL_SENT, {
       email,
       topic,

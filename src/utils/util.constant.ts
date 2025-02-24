@@ -20,7 +20,8 @@ export const PASSWORD_MAX_LENGTH = 16;
 // ENV Variables
 export const appName = process.env.APP_NAME ?? 'MAIL_MICROSERVICE';
 export const kafkaUrl = process.env.KAFKA_URL ?? '104.248.162.129:9092';
-export const jwtSecret = process.env.JWT_SECRET ?? 'auth-microservice-secret-key';
+export const jwtSecret =
+  process.env.JWT_SECRET ?? 'auth-microservice-secret-key';
 export const expiryDuration = process.env.JWT_DURATION_EXPIRY
   ? String(process.env.JWT_DURATION_EXPIRY)
   : '1h';

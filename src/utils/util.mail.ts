@@ -1,37 +1,37 @@
 import { MAX_ERRORS, redirectUrl } from './util.constant';
-const loginTime = new Date().toLocaleString();
 
 export const mailTemplates = (
   topic: string,
   clientIp: string,
   deviceInfo: string,
+  currentTime: string,
 ) => {
   switch (topic) {
     case 'user.signup':
       return {
         subject: 'User Signup',
         text: `Your account has been created successfully! \n Location: ${clientIp}`,
-        html: htmlTemplate(clientIp, redirectUrl, deviceInfo),
+        html: htmlTemplate(clientIp, redirectUrl, deviceInfo, currentTime),
       };
 
     case 'user.login':
       return {
         subject: 'User Login',
         text: `Your account has been logged into successfully! \n Location: ${clientIp}`,
-        html: htmlLoginTemplate(clientIp, deviceInfo),
+        html: htmlLoginTemplate(clientIp, deviceInfo, currentTime),
       };
 
     case 'user.login.error.alert':
       return {
         subject: '🚨 High Login Error Alert!',
         text: `More than ${MAX_ERRORS} failed login attempts detected within a short time.\n Location: ${clientIp} \n Device: ${deviceInfo}`,
-        html: htmlAlertTemplate(clientIp, deviceInfo),
+        html: htmlAlertTemplate(clientIp, deviceInfo, currentTime),
       };
 
     default:
       return {
         subject: 'Notification',
-        text: `You have received a new notification. \n Location: ${clientIp}`,
+        text: `You have received a new notification. \n Location: ${clientIp}. \n Location: ${deviceInfo}. \n Location: ${currentTime}`,
       };
   }
 };
@@ -40,6 +40,7 @@ const htmlTemplate = (
   clientIp: string,
   verifyLink: string,
   deviceInfo: string,
+  currentTime: string,
 ) => `
 <!DOCTYPE html>
 <html>
@@ -97,7 +98,7 @@ const htmlTemplate = (
     <h2>Welcome to Our Platform!</h2>
     <p>Your account has been created successfully.</p>
     <p><strong>Location:</strong> ${clientIp}</p>
-    <p><strong>Time:</strong> ${loginTime}</p>
+    <p><strong>Time:</strong> ${currentTime}</p>
     <p><strong>Device:</strong> ${deviceInfo}</p>
     <p>To get started, please verify your email by clicking the button below:</p>
     <a href="${verifyLink}" class="button">Verify Email</a>
@@ -110,7 +111,11 @@ const htmlTemplate = (
 </html>
 `;
 
-const htmlLoginTemplate = (clientIp: string, deviceInfo: string) => `
+const htmlLoginTemplate = (
+  clientIp: string,
+  deviceInfo: string,
+  currentTime: string,
+) => `
 <!DOCTYPE html>
 <html>
 <head>
@@ -151,7 +156,7 @@ const htmlLoginTemplate = (clientIp: string, deviceInfo: string) => `
     <h2>New Login Detected</h2>
     <p>Your account has been logged into successfully.</p>
     <p><strong>Location:</strong> ${clientIp}</p>
-    <p><strong>Time:</strong> ${loginTime}</p>
+    <p><strong>Time:</strong> ${currentTime}</p>
     <p><strong>Device:</strong> ${deviceInfo}</p>
     <p>If this wasn't you, please <a href=${redirectUrl}>reset your password</a> immediately.</p>
     <div class="footer">
@@ -162,7 +167,11 @@ const htmlLoginTemplate = (clientIp: string, deviceInfo: string) => `
 </html>
 `;
 
-const htmlAlertTemplate = (clientIp: string, deviceInfo: string) => `
+const htmlAlertTemplate = (
+  clientIp: string,
+  deviceInfo: string,
+  currentTime: string,
+) => `
 <!DOCTYPE html>
 <html>
 <head>
@@ -235,7 +244,7 @@ const htmlAlertTemplate = (clientIp: string, deviceInfo: string) => `
       <div class="details">
         <p><strong>Location:</strong> ${clientIp}</p>
         <p><strong>Device:</strong> ${deviceInfo}</p>
-        <p><strong>Time:</strong> ${loginTime}</p>
+        <p><strong>Time:</strong> ${currentTime}</p>
       </div>
       <p>If this wasn't you, we recommend securing your account immediately.</p>
       <a href=${redirectUrl} class="button">Reset Password</a>
