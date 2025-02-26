@@ -96,7 +96,7 @@ const htmlTemplate = (
 <body>
   <div class="container">
     <h2>Welcome to Our Platform!</h2>
-    <p>Your account has been created successfully.</p>
+    <p>Your account has been created successfully.<br><br>
     <p><strong>Location:</strong> ${clientIp}</p>
     <p><strong>Time:</strong> ${currentTime}</p>
     <p><strong>Device:</strong> ${deviceInfo}</p>
@@ -154,7 +154,7 @@ const htmlLoginTemplate = (
 <body>
   <div class="container">
     <h2>New Login Detected</h2>
-    <p>Your account has been logged into successfully.</p>
+    <p>Your account has been logged into successfully.</p><br><br>
     <p><strong>Location:</strong> ${clientIp}</p>
     <p><strong>Time:</strong> ${currentTime}</p>
     <p><strong>Device:</strong> ${deviceInfo}</p>
