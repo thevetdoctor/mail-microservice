@@ -36,7 +36,7 @@ export class ConsumerService implements OnModuleInit {
           const msg = JSON.parse(message.value.toString());
           console.log('\n', `🚀 Event Received: ${topic}`, msg, '\n');
 
-          if (topic === KafkaTopics.USER_LOGIN_ERROR) {
+          if ([KafkaTopics.USER_LOGIN_ERROR, KafkaTopics.USER_SIGNUP_ERROR].includes(topic as KafkaTopics)) {
             this.trackLoginError(msg);
           } else {
             await this.mailService.sendEmail(msg, topic);
