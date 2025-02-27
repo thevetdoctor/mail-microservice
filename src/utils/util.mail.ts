@@ -95,14 +95,14 @@ const htmlTemplate = (
 </head>
 <body>
   <div class="container">
-    <h2>Welcome to Our Platform!</h2>
-    <p>Your account has been created successfully.</p>
-    <p><strong>Location:</strong> ${clientIp}</p>
-    <p><strong>Time:</strong> ${currentTime}</p>
-    <p><strong>Device:</strong> ${deviceInfo}</p>
-    <p>To get started, please verify your email by clicking the button below:</p>
+    <h2>Welcome to Our Platform!</h2><br>
+    <p>Your account has been created successfully.</p><br>
+    <p class="footer"><strong>Location:</strong> ${clientIp}</p>
+    <p class="footer"><strong>Time:</strong> ${currentTime}</p>
+    <p class="footer"><strong>Device:</strong> ${deviceInfo}</p>
+    <p class="footer">To get started, please verify your email by clicking the button below:</p>
     <a href="${verifyLink}" class="button">Verify Email</a>
-    <p>If this wasn't you, please contact our support team immediately.</p>
+    <p class="footer">If this wasn't you, please contact our support team immediately.</p>
     <div class="footer">
       &copy; 2025 Your Company. All rights reserved.
     </div>
@@ -153,12 +153,12 @@ const htmlLoginTemplate = (
 </head>
 <body>
   <div class="container">
-    <h2>New Login Detected</h2>
-    <p>Your account has been logged into successfully.</p>
-    <p><strong>Location:</strong> ${clientIp}</p>
-    <p><strong>Time:</strong> ${currentTime}</p>
-    <p><strong>Device:</strong> ${deviceInfo}</p>
-    <p>If this wasn't you, please <a href=${redirectUrl}>reset your password</a> immediately.</p>
+    <h2>New Login Detected</h2><br>
+    <p>Your account has been logged into successfully.</p><br>
+    <p class="footer"><strong>Location:</strong> ${clientIp}</p>
+    <p class="footer"><strong>Time:</strong> ${currentTime}</p>
+    <p class="footer"><strong>Device:</strong> ${deviceInfo}</p>
+    <p class="footer">If this wasn't you, please <a href=${redirectUrl}>reset your password</a> immediately.</p>
     <div class="footer">
       &copy; 2025 Your Company. All rights reserved.
     </div>
