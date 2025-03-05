@@ -31,7 +31,7 @@ export const mailTemplates = (
     default:
       return {
         subject: 'Notification',
-        text: `You have received a new notification. \n Location: ${clientIp}. \n Location: ${deviceInfo}. \n Location: ${currentTime}`,
+        text: `You have received a new notification. \n Location: ${clientIp}. \n Device: ${deviceInfo}. \n Time: ${currentTime}`,
       };
   }
 };
