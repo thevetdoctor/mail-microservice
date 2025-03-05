@@ -26,6 +26,7 @@ export class ConsumerService implements OnModuleInit {
         KafkaTopics.USER_LOGIN,
         KafkaTopics.USER_SIGNUP,
         KafkaTopics.USER_LOGIN_ERROR,
+        KafkaTopics.SUBMIT_FEEDBACK,
       ],
       fromBeginning: false,
     });

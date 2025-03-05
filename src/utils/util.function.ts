@@ -1,4 +1,6 @@
 import { BadRequestException } from '@nestjs/common';
+import { UAParser } from 'ua-parser-js';
+const axios = require('axios');
 
 export const checkForRequiredFields = (
   requiredFields: string[],
@@ -76,5 +78,50 @@ export const validatePassword = (password: string): void => {
     )
   ) {
     throw new BadRequestException(message);
+  }
+};
+
+export const getIdentity = (
+  req: any,
+): { clientIp: string; deviceInfo: string } => {
+  const parser = new UAParser(req.headers['user-agent']); // Get device info
+  const deviceInfo = `${parser.getBrowser().name} on ${parser.getOS().name} (${parser.getDevice().model || 'Unknown Device'})`;
+  let clientIp =
+    (req.headers['x-forwarded-for'] as string)?.split(',')[0] || req.ip;
+  clientIp = clientIp.includes('::ffff:')
+    ? clientIp.split('::ffff:')[1]
+    : clientIp;
+  console.log('Client IP:', clientIp, 'Device', deviceInfo);
+  return { clientIp, deviceInfo };
+};
+
+export const getCurrentTime = () =>
+  new Date().toLocaleString('en-US', {
+    timeZone: 'UTC',
+    year: 'numeric',
+    month: 'long', // Use 'short' or '2-digit' for different formats
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric',
+    hour12: true,
+  });
+
+export const getLocation = async (ip): Promise<string> => {
+  try {
+    // const ipv4 = getIPv4(ip);
+    const serverIp = process.env.SERVER_IP ?? '';
+    if (!serverIp) {
+      return 'Unknown';
+    }
+    ip = ip === '::1' ? serverIp : ip;
+    const response = await axios.get(`http://ip-api.com/json/${ip}`);
+    console.log(ip, response.data);
+    const { city, country, isp } = response.data;
+    const parsedLocation = `${city}, ${country}: ${isp}`;
+    return parsedLocation;
+  } catch (error) {
+    console.error('Error fetching location:', error);
+    return null;
   }
 };

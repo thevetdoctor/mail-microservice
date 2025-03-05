@@ -25,13 +25,17 @@
     "@nestjs/jwt": "^11.0.0",
     "@nestjs/platform-express": "^10.0.0",
     "@nestjs/swagger": "^11.0.4",
+    "axios": "^1.8.1",
+    "class-validator": "^0.14.1",
     "dotenv": "^16.4.7",
     "kafka": "^0.2.3",
     "kafkajs": "^2.2.4",
     "nodemailer": "^6.10.0",
+    "oba-http-response": "^1.0.1",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1",
-    "swagger-ui-express": "^5.0.1"
+    "swagger-ui-express": "^5.0.1",
+    "ua-parser-js": "^2.0.2"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",
