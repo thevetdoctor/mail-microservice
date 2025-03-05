@@ -32,6 +32,7 @@ export const mailTemplates = (
       return {
         subject: 'Notification',
         text: `You have received a new notification. \n Location: ${clientIp}. \n Device: ${deviceInfo}. \n Time: ${currentTime}`,
+        html: htmlDefaultTemplate(clientIp, deviceInfo, currentTime),
       };
   }
 };
@@ -103,6 +104,62 @@ const htmlTemplate = (
     <p class="footer">To get started, please verify your email by clicking the button below:</p>
     <a href="${verifyLink}" class="button">Verify Email</a>
     <p class="footer">If this wasn't you, please contact our support team immediately.</p>
+    <div class="footer">
+      &copy; 2025 Your Company. All rights reserved.
+    </div>
+  </div>
+</body>
+</html>
+`;
+
+const htmlDefaultTemplate = (
+  clientIp: string,
+  deviceInfo: string,
+  currentTime: string,
+) => `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Notification</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      padding: 20px;
+    }
+    .container {
+      max-width: 600px;
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+    h2 {
+      color: #333;
+    }
+    p {
+      font-size: 16px;
+      color: #555;
+      line-height: 1.6;
+    }
+    .footer {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #888;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Notification</h2><br>
+    <p>You have received a new notification.</p><br>
+    <p class="footer"><strong>Location:</strong> ${clientIp}</p>
+    <p class="footer"><strong>Time:</strong> ${currentTime}</p>
+    <p class="footer"><strong>Device:</strong> ${deviceInfo}</p>
+    <p class="footer">If this wasn't you, please <a href=${redirectUrl}>reset your password</a> immediately.</p>
     <div class="footer">
       &copy; 2025 Your Company. All rights reserved.
     </div>
