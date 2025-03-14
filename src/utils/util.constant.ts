@@ -50,6 +50,8 @@ export enum NodeEnvironment {
 }
 
 export enum KafkaTopics {
+  MAIL_SEND = 'mail.send',
+  MAIL_SEND_ERROR = 'mail.send.error',
   SUBMIT_FEEDBACK = 'submit.feedback',
   SUBMIT_FEEDBACK_ERROR = 'submit.feedback.error',
   MAIL_SENT = 'mail.sent',

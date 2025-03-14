@@ -1,8 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
 import {
   emailPass,
   emailUser,
+  getCurrentTime,
   KafkaTopics,
   mailPort,
   mailSMtpServer,
@@ -10,6 +11,7 @@ import {
 } from 'src/utils';
 import * as dotenv from 'dotenv';
 import { ProducerService } from 'src/kafka/producer/producer.service';
+import { MailSendDTO } from './mail.dto';
 dotenv.config();
 
 @Injectable()
@@ -48,5 +50,33 @@ export class MailService {
       text,
       html,
     });
+  }
+
+  async externalSendMail(
+    payload: MailSendDTO,
+    clientIp,
+    deviceInfo,
+  ): Promise<boolean> {
+    const currentTime = `${getCurrentTime()} UTC`;
+    try {
+      // 🔥 Send mail send event to Kafka
+      await this.kafkaProducer.sendMessage(KafkaTopics.MAIL_SEND, {
+        ...payload,
+        clientIp,
+        deviceInfo,
+        currentTime,
+      });
+      return true;
+    } catch (e) {
+      // 🔥 Send mail send error event to Kafka
+      await this.kafkaProducer.sendMessage(KafkaTopics.MAIL_SEND_ERROR, {
+        email: payload.to,
+        clientIp,
+        deviceInfo,
+        currentTime,
+        error: e.message,
+      });
+      throw new BadRequestException(e.message);
+    }
   }
 }

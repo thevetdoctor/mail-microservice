@@ -20,6 +20,7 @@ export class ConsumerService implements OnModuleInit {
     const kafka = new Kafka({ brokers: [kafkaUrl] });
     const consumer = kafka.consumer({ groupId: 'mail-group' });
 
+    // await consumer.disconnect();
     await consumer.connect();
     await consumer.subscribe({
       topics: [
@@ -27,6 +28,7 @@ export class ConsumerService implements OnModuleInit {
         KafkaTopics.USER_SIGNUP,
         KafkaTopics.USER_LOGIN_ERROR,
         KafkaTopics.SUBMIT_FEEDBACK,
+        KafkaTopics.MAIL_SEND
       ],
       fromBeginning: false,
     });
