@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { appName, kafkaUrl, mailPort, mailSMtpServer } from './utils';
 import { DocumentBuilder, OpenAPIObject, SwaggerModule } from '@nestjs/swagger';
 import * as dotenv from 'dotenv';
+import { CustomHttpExceptionFilter } from './filters/exceptionFilter';
 dotenv.config();
 
 async function bootstrap() {
@@ -10,7 +11,10 @@ async function bootstrap() {
 
   try {
     const app = await NestFactory.create(AppModule);
-
+    app.enableCors();
+    app.useGlobalFilters(
+      new CustomHttpExceptionFilter(),
+    );
     app.enableCors();
     const config = new DocumentBuilder()
       .setTitle(appName)
