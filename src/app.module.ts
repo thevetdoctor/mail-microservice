@@ -7,7 +7,7 @@ import { MailModule } from './mail/mail.module';
 import { ProducerService } from './kafka/producer/producer.service';
 import { FeedbackModule } from './feedback/feedback.module';
 import { KafkaModule } from './kafka/kafka.module';
-import { LoggerMiddleware } from './middlewares';
+import { GatewayAuthMiddleware, LoggerMiddleware } from './middlewares';
 
 @Module({
   imports: [MailModule, FeedbackModule, KafkaModule],
@@ -16,6 +16,7 @@ import { LoggerMiddleware } from './middlewares';
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(LoggerMiddleware).forRoutes('*');
+    consumer.apply(LoggerMiddleware).forRoutes('*'); // Protect all routes
+    consumer.apply(GatewayAuthMiddleware).forRoutes('*'); // Protect all routes
   }
 }

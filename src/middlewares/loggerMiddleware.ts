@@ -14,7 +14,10 @@ const enumerateErrorFormat = format((info: Error) => {
 });
 
 // Ensure the logs directory exists
-const logsDirectory = path.join(__dirname, `./../../${appName.toLocaleLowerCase()}_logss`);
+const logsDirectory = path.join(
+  __dirname,
+  `./../../${appName.toLocaleLowerCase()}_logss`,
+);
 if (!fs.existsSync(logsDirectory)) {
   try {
     fs.mkdirSync(logsDirectory, { mode: 0o777 });

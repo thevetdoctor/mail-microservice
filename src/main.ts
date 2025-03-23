@@ -12,9 +12,7 @@ async function bootstrap() {
   try {
     const app = await NestFactory.create(AppModule);
     app.enableCors();
-    app.useGlobalFilters(
-      new CustomHttpExceptionFilter(),
-    );
+    app.useGlobalFilters(new CustomHttpExceptionFilter());
     app.enableCors();
     const config = new DocumentBuilder()
       .setTitle(appName)

@@ -25,9 +25,12 @@ export const jwtSecret =
 export const expiryDuration = process.env.JWT_DURATION_EXPIRY
   ? String(process.env.JWT_DURATION_EXPIRY)
   : '1h';
+export const apiGatewayUrl =
+  process.env.API_GATEWAY_URL ?? 'https://gateway.softafrik.com';
 export const redirectUrl = process.env.REDIRECT_URL ?? 'https://softafrik.com';
 export const mailSMtpServer = process.env.MAIL_SMTP_SERVER ?? 'smtp.gmail.com';
 export const mailPort = process.env.MAIL_PORT ?? 'Not Supplied';
+export const encryptionKey = process.env.ENCRYPTION_KEY ?? 'undefinedkey'
 export const emailUser = process.env.EMAIL_USER ?? 'Not Supplied';
 export const emailPass = process.env.EMAIL_PASS ?? 'Not Supplied';
 export const adminEmail = process.env.ADMIN_EMAIL ?? 'thevetdoctor@gmail.com';

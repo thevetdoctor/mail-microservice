@@ -1,10 +1,12 @@
 import { Body, Controller, HttpStatus, Post, Req, Res } from '@nestjs/common';
+import { ApiBearerAuth } from '@nestjs/swagger';
 import { response } from 'oba-http-response';
 import { getIdentity, getLocation } from 'src/utils';
 import { MailSendDTO } from './mail.dto';
 import { MailService } from './mail.service';
 
 @Controller('mail')
+@ApiBearerAuth('JWT')
 export class MailController {
   constructor(private readonly mailService: MailService) {}
 

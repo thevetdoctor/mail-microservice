@@ -4,8 +4,10 @@ import { Request, Response } from 'express';
 import { FeedbackService } from './feedback.service';
 import { response } from 'oba-http-response';
 import { getIdentity, getLocation } from 'src/utils';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('feedback')
+@ApiBearerAuth('JWT')
 export class FeedbackController {
   constructor(private readonly feedbackService: FeedbackService) {}
 
