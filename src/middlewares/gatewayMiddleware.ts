@@ -5,14 +5,14 @@ import {
 } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
 import axios from 'axios';
-import { axiosErrorLogic, encryptionKey } from 'src/utils';
+import { apiGatewayUrl, axiosErrorLogic, encryptionKey } from 'src/utils';
 const { AES, enc } = require('crypto-js');
 
 @Injectable()
 export class GatewayAuthMiddleware implements NestMiddleware {
   async use(req: Request, res: Response, next: NextFunction) {
     try {
-      const gatewayUrl = process.env.API_GATEWAY_URL + '/auth/validate';
+      const gatewayUrl = apiGatewayUrl + '/auth/validate';
       const token = req.headers.authorization; // Get token from request
       console.log('token', token, gatewayUrl);
       if (!token) {
