@@ -13,6 +13,7 @@ export const USER_REPOSITORY = 'USER_REPOSITORY';
 export const BLACKLISTED_TOKENS = 'BLACKLISTED_TOKENS';
 export const TWO_FACTOR_TOKEN_REPOSITORY = 'TWO_FACTOR_TOKEN_REPOSITORY';
 export const RESET_TOKEN_REPOSITORY = 'RESET_TOKEN_REPOSITORY';
+export const MAIL_CONFIG_REPOSITORY = 'MAIL_CONFIG_REPOSITORY';
 
 export const PASSWORD_MIN_LENGTH = 8;
 export const PASSWORD_MAX_LENGTH = 16;
@@ -25,6 +26,9 @@ export const jwtSecret =
 export const expiryDuration = process.env.JWT_DURATION_EXPIRY
   ? String(process.env.JWT_DURATION_EXPIRY)
   : '1h';
+export const dbSchema = process.env.DB_SCHEMA ? process.env.DB_SCHEMA : 'mail';
+export const dbUrl =
+  process.env.DB_URL ?? 'postgres://admin:strange@178.128.32.101:5432/micro-db';
 export const apiGatewayUrl =
   process.env.API_GATEWAY_URL ?? 'https://gateway.softafrik.com';
 export const redirectUrl = process.env.REDIRECT_URL ?? 'https://softafrik.com';
@@ -40,6 +44,10 @@ export const errorTimeLimit = process.env.ERROR_TIME_LIMIT
 export const MAX_ERRORS = process.env.MAX_ERRORS
   ? Number(process.env.ERROR_TIME_LIMIT)
   : 10;
+export const DB_LOGGING = process.env.DB_LOGGING ? true : false;
+export const NODE_ENV = process.env.NODE_ENV
+  ? process.env.NODE_ENV
+  : DEVELOPMENT;
 
 export enum AppRole {
   ADMIN = 'admin',

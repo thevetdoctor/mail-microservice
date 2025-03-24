@@ -8,9 +8,10 @@ import { ProducerService } from './kafka/producer/producer.service';
 import { FeedbackModule } from './feedback/feedback.module';
 import { KafkaModule } from './kafka/kafka.module';
 import { GatewayAuthMiddleware, LoggerMiddleware } from './middlewares';
+import { DatabaseModule } from './database/database.module';
 
 @Module({
-  imports: [MailModule, FeedbackModule, KafkaModule],
+  imports: [MailModule, FeedbackModule, KafkaModule, DatabaseModule],
   controllers: [AppController],
   providers: [AppService, ConsumerService, MailService, ProducerService],
 })

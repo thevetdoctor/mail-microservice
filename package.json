@@ -33,8 +33,12 @@
     "kafkajs": "^2.2.4",
     "nodemailer": "^6.10.0",
     "oba-http-response": "^1.0.1",
+    "pg": "^8.14.1",
+    "pg-hstore": "^2.3.4",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1",
+    "sequelize": "^6.37.6",
+    "sequelize-typescript": "^2.1.6",
     "swagger-ui-express": "^5.0.1",
     "ua-parser-js": "^2.0.2",
     "winston": "^3.17.0"

@@ -29,4 +29,7 @@ export class MailSendDTO {
     description: 'HTML template string without the html tags',
   })
   template?: string;
+
+  @ApiProperty()
+  apiUser?: string;
 }

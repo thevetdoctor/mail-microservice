@@ -17,6 +17,7 @@ export class MailController {
     @Res() res: Response,
   ) {
     try {
+      payload.apiUser = JSON.parse(req['user']).email;
       let { clientIp: ip, deviceInfo } = getIdentity(req);
       const clientIp = await getLocation(ip);
       await this.mailService.externalSendMail(payload, clientIp, deviceInfo);
