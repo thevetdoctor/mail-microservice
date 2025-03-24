@@ -5,6 +5,7 @@ export const mailTemplates = (
   clientIp: string,
   deviceInfo: string,
   currentTime: string,
+  text?: string,
 ) => {
   switch (topic) {
     case 'user.signup':
@@ -32,7 +33,7 @@ export const mailTemplates = (
       return {
         subject: 'Notification',
         text: `You have received a new notification. \n Location: ${clientIp}. \n Device: ${deviceInfo}. \n Time: ${currentTime}`,
-        html: htmlDefaultTemplate(clientIp, deviceInfo, currentTime),
+        html: htmlDefaultTemplate(text, clientIp, deviceInfo, currentTime),
       };
   }
 };
@@ -113,6 +114,7 @@ const htmlTemplate = (
 `;
 
 const htmlDefaultTemplate = (
+  text: string = 'You have received a new notification.',
   clientIp: string,
   deviceInfo: string,
   currentTime: string,
@@ -155,7 +157,7 @@ const htmlDefaultTemplate = (
 <body>
   <div class="container">
     <h2>Notification</h2><br>
-    <p>You have received a new notification.</p><br>
+    <p> ${text} </p><br>
     <p class="footer"><strong>Location:</strong> ${clientIp}</p>
     <p class="footer"><strong>Time:</strong> ${currentTime}</p>
     <p class="footer"><strong>Device:</strong> ${deviceInfo}</p>

@@ -31,25 +31,36 @@ export class MailService {
   }
 
   async sendEmail(msg: any, topic: string) {
-    const { email, clientIp, deviceInfo, currentTime } = msg;
-    const { subject, text, html } = mailTemplates(
-      topic,
-      clientIp,
-      deviceInfo,
-      currentTime,
-    );
-    await this.kafkaProducer.sendMessage(KafkaTopics.MAIL_SENT, {
-      email,
-      topic,
-    });
-    console.log('\n', `Email sent to ${email} by topic: ${topic}`, '\n');
-    return this.transporter.sendMail({
-      from: process.env.EMAIL_USER,
-      to: email,
-      subject,
-      text,
-      html,
-    });
+    try {
+      const { email, clientIp, deviceInfo, currentTime, from, to, message } =
+        msg;
+      const { subject, text, html } = mailTemplates(
+        topic,
+        clientIp,
+        deviceInfo,
+        currentTime,
+        message,
+      );
+      await this.kafkaProducer.sendMessage(KafkaTopics.MAIL_SENT, {
+        email,
+        topic,
+      });
+      console.log('from', from, to, message, process.env.EMAIL_USER);
+      console.log(
+        '\n',
+        `Email sent to ${to || email} by topic: ${topic}`,
+        '\n',
+      );
+      await this.transporter.sendMail({
+        from: `${from} <${process.env.EMAIL_USER}>`,
+        to: to || email,
+        subject,
+        text: message || text,
+        html,
+      });
+    } catch (e) {
+      throw new BadRequestException(e.message);
+    }
   }
 
   async externalSendMail(

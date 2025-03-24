@@ -3,18 +3,10 @@ import { IsEmail, IsNotEmpty } from 'class-validator';
 
 export class MailSendDTO {
   @ApiProperty({
-    example: 'consultoba',
-    description: 'User name',
+    example: 'Innovantics Ltd',
+    description: 'Sender identity or email address',
   })
-  @IsNotEmpty({ message: 'Sender is required' })
-  sender: string;
-
-  @ApiProperty({
-    example: 'consultoba@gmail.com',
-    description: 'Sender email address',
-  })
-  @IsEmail({}, { message: 'Invalid email format' })
-  @IsNotEmpty({ message: 'Sender Email is required' })
+  @IsNotEmpty({ message: 'Sender Identity or Email is required' })
   from: string;
 
   @ApiProperty({
@@ -32,9 +24,9 @@ export class MailSendDTO {
   @IsNotEmpty({ message: 'Message is required' })
   message: string;
 
-  @ApiProperty({
-    example: '<html></html>>',
-    description: 'HTML template string',
-  })
-  template?: string;
+  // @ApiProperty({
+  //   example: '<html></html>',
+  //   description: 'HTML template string',
+  // })
+  // template?: string;
 }
