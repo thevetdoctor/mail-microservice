@@ -24,7 +24,7 @@ export const databaseConfig: IDbConfig = {
     dialect: 'postgres',
   },
   production: {
-    urlDatabase: process.env.DB_URL,
+    urlDatabase: dbUrl,
     username: process.env.DB_USER,
     password: process.env.DB_PASS,
     database: process.env.DB_NAME_PRODUCTION,
