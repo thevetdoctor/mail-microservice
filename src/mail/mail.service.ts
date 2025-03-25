@@ -16,7 +16,7 @@ import {
 } from 'src/utils';
 import * as dotenv from 'dotenv';
 import { ProducerService } from 'src/kafka/producer/producer.service';
-import { MailSendDTO } from './mail.dto';
+import { ExtendedMailSendDTO, MailSendDTO } from './mail.dto';
 import { MailConfigService } from './mailconfig/mailconfig.service';
 dotenv.config();
 
@@ -40,7 +40,7 @@ export class MailService {
   }
 
   async createTransporter(
-    email: string = 'consultoba@gmail.com',
+    apiUser: string = 'consultoba@gmail.com',
   ): Promise<Transporter> {
     try {
       // await this.mailConfigService.generateMailConfig({
@@ -48,16 +48,22 @@ export class MailService {
       //   smtpUser: 'dev@innovantics.com',
       //   smtpPass: 'dgrfzvprmonvspky',
       // });
-      const mailConfig = await this.mailConfigService.getMailConfig(email);
+      const mailConfig = await this.mailConfigService.getMailConfig(apiUser);
       console.log('mailConfig', mailConfig);
       const { smtpHost, smtpPort, smtpUser, smtpPass } = mailConfig;
       return nodemailer.createTransport({
-        host: smtpHost || mailSMtpServer,
-        port: smtpPort || Number(mailPort),
+        // host: smtpHost || mailSMtpServer,
+        // port: smtpPort || Number(mailPort),
+        // secure: true,
+        // auth: {
+        //   user: smtpUser || emailUser,
+        //   pass: smtpPass || emailPass,
+        host: mailSMtpServer,
+        port: Number(mailPort),
         secure: true,
         auth: {
-          user: smtpUser || emailUser,
-          pass: smtpPass || emailPass,
+          user: emailUser,
+          pass: emailPass,
         },
       });
     } catch (e) {
@@ -109,7 +115,7 @@ export class MailService {
   }
 
   async externalSendMail(
-    payload: MailSendDTO,
+    payload: ExtendedMailSendDTO,
     clientIp,
     deviceInfo,
   ): Promise<boolean> {

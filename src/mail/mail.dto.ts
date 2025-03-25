@@ -29,7 +29,9 @@ export class MailSendDTO {
     description: 'HTML template string without the html tags',
   })
   template?: string;
+}
 
+export class ExtendedMailSendDTO extends MailSendDTO {
   @ApiProperty()
   apiUser?: string;
 }
