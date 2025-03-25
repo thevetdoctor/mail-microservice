@@ -1,6 +1,8 @@
 import { BadRequestException, HttpStatus } from '@nestjs/common';
 import { UAParser } from 'ua-parser-js';
+import { encryptionKey } from './util.constant';
 const axios = require('axios');
+const { AES, enc } = require('crypto-js');
 
 export const checkForRequiredFields = (
   requiredFields: string[],
@@ -152,4 +154,12 @@ export const axiosErrorLogic = (
     message = error.message || 'Internal request error';
   }
   return { status, message };
+};
+
+export const encrypted = (data) => {
+  return AES.encrypt(data, encryptionKey).toString();
+};
+
+export const decrypted = (data) => {
+  return AES.decrypt(data, encryptionKey).toString(enc.Utf8);
 };

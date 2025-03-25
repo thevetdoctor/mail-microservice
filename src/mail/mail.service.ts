@@ -6,6 +6,7 @@ import {
 import * as nodemailer from 'nodemailer';
 import { Transporter } from 'nodemailer';
 import {
+  decrypted,
   emailPass,
   emailUser,
   getCurrentTime,
@@ -16,58 +17,43 @@ import {
 } from 'src/utils';
 import * as dotenv from 'dotenv';
 import { ProducerService } from 'src/kafka/producer/producer.service';
-import { ExtendedMailSendDTO, MailSendDTO } from './mail.dto';
+import { ExtendedMailSendDTO } from './mail.dto';
 import { MailConfigService } from './mailconfig/mailconfig.service';
 dotenv.config();
 
 @Injectable()
 export class MailService {
-  // private transporter;
-
   constructor(
     private readonly kafkaProducer: ProducerService,
     private readonly mailConfigService: MailConfigService,
-  ) {
-    // this.transporter = nodemailer.createTransport({
-    //   host: mailSMtpServer,
-    //   port: Number(mailPort),
-    //   secure: true,
-    //   auth: {
-    //     user: emailUser,
-    //     pass: emailPass,
-    //   },
-    // });
-  }
+  ) {}
 
   async createTransporter(
     apiUser: string = 'consultoba@gmail.com',
   ): Promise<Transporter> {
     try {
       // await this.mailConfigService.generateMailConfig({
-      //   email: 'dev@innovantics.com',
-      //   smtpUser: 'dev@innovantics.com',
-      //   smtpPass: 'dgrfzvprmonvspky',
+      //   email: 'animalworld.tech@gmail.com',
+      //   smtpUser: 'animalworld.tech@gmail.com',
+      //   smtpPass: 'vhsyaafnwcbhjtml',
       // });
       const mailConfig = await this.mailConfigService.getMailConfig(apiUser);
-      console.log('mailConfig', mailConfig);
       const { smtpHost, smtpPort, smtpUser, smtpPass } = mailConfig;
+      const decryptedSmtpPass = decrypted(smtpPass);
+      console.log('mailConfig', mailConfig, decryptedSmtpPass);
       return nodemailer.createTransport({
-        // host: smtpHost || mailSMtpServer,
-        // port: smtpPort || Number(mailPort),
-        // secure: true,
-        // auth: {
-        //   user: smtpUser || emailUser,
-        //   pass: smtpPass || emailPass,
-        host: mailSMtpServer,
-        port: Number(mailPort),
+        host: smtpHost || mailSMtpServer,
+        port: smtpPort || Number(mailPort),
         secure: true,
         auth: {
-          user: emailUser,
-          pass: emailPass,
+          user: smtpUser || emailUser,
+          pass: decryptedSmtpPass || emailPass,
         },
       });
     } catch (e) {
-      throw new NotFoundException('Error creating mail transporter');
+      throw new NotFoundException(
+        `Error creating mail transporter: ${e.message}`,
+      );
     }
   }
 

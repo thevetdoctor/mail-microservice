@@ -1,5 +1,5 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
-import { MAIL_CONFIG_REPOSITORY } from 'src/utils';
+import { encrypted, MAIL_CONFIG_REPOSITORY } from 'src/utils';
 import { MailConfigDTO } from './mailconfig.dto';
 import { MailConfigs } from './mailconfig.entity';
 
@@ -28,7 +28,12 @@ export class MailConfigService {
 
   async generateMailConfig(payload: MailConfigDTO): Promise<MailConfigs> {
     try {
-      const mailConfig = await this.mailConfigRepo.create({ ...payload });
+      const { smtpPass } = payload;
+      const encryptedSmtpPass = encrypted(smtpPass);
+      const mailConfig = await this.mailConfigRepo.create({
+        ...payload,
+        smtpPass: encryptedSmtpPass,
+      });
       return mailConfig;
     } catch (e) {
       throw e;
