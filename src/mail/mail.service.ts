@@ -23,6 +23,7 @@ dotenv.config();
 
 @Injectable()
 export class MailService {
+
   constructor(
     private readonly kafkaProducer: ProducerService,
     private readonly mailConfigService: MailConfigService,
@@ -33,9 +34,9 @@ export class MailService {
   ): Promise<Transporter> {
     try {
       // await this.mailConfigService.generateMailConfig({
-      //   email: 'animalworld.tech@gmail.com',
-      //   smtpUser: 'animalworld.tech@gmail.com',
-      //   smtpPass: 'vhsyaafnwcbhjtml',
+      //   email: 'consultoba@gmail.com',
+      //   smtpUser: 'consultoba@gmail.com',
+      //   smtpPass: '',
       // });
       const mailConfig = await this.mailConfigService.getMailConfig(apiUser);
       const { smtpHost, smtpPort, smtpUser, smtpPass } = mailConfig;

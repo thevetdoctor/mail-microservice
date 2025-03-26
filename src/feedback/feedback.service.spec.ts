@@ -1,4 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { ProducerService } from 'src/kafka/producer/producer.service';
 import { FeedbackService } from './feedback.service';
 
 describe('FeedbackService', () => {
@@ -6,7 +7,7 @@ describe('FeedbackService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [FeedbackService],
+      providers: [FeedbackService, ProducerService],
     }).compile();
 
     service = module.get<FeedbackService>(FeedbackService);
