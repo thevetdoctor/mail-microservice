@@ -2,6 +2,7 @@
 /dist
 /node_modules
 /build
+mail_microservice_logss
 
 # Logs
 logs

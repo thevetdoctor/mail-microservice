@@ -7,3 +7,5 @@ node_modules
 npm-debug.log
 *.log
 coverage1
+mail_microservice_logss
+
