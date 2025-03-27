@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { appName, kafkaUrl, mailPort, mailSMtpServer } from './utils';
+import { appName, kafkaUrl, mailPort, mailSMtpServer, port } from './utils';
 import { DocumentBuilder, OpenAPIObject, SwaggerModule } from '@nestjs/swagger';
 import * as dotenv from 'dotenv';
 import { CustomHttpExceptionFilter } from './filters/exceptionFilter';
