@@ -38,6 +38,7 @@ export const encryptionKey = process.env.ENCRYPTION_KEY ?? 'undefinedkey';
 export const emailUser = process.env.EMAIL_USER ?? 'Not Supplied';
 export const emailPass = process.env.EMAIL_PASS ?? 'Not Supplied';
 export const adminEmail = process.env.ADMIN_EMAIL ?? 'thevetdoctor@gmail.com';
+export const port = process.env.PORT ?? 3002;
 export const errorTimeLimit = process.env.ERROR_TIME_LIMIT
   ? Number(process.env.ERROR_TIME_LIMIT)
   : 60000;

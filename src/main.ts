@@ -7,7 +7,6 @@ import { CustomHttpExceptionFilter } from './filters/exceptionFilter';
 dotenv.config();
 
 async function bootstrap() {
-  const port = process.env.PORT ?? 3002;
 
   try {
     const app = await NestFactory.create(AppModule);
