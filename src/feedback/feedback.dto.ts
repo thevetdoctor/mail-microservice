@@ -29,4 +29,10 @@ export class FeedbackDTO {
     description: 'Optional Sender Identity',
   })
   from: string;
+
+  @ApiProperty({
+    example: '<p>Please login with the OTP below<p><p>Token: 12345678</p>',
+    description: 'HTML template string without the html tags',
+  })
+  template?: string;
 }
