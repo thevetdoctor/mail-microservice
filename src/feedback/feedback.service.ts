@@ -20,10 +20,10 @@ export class FeedbackService {
     try {
       checkForRequiredFields(['name', 'email', 'message'], payload);
       validateEmailField(payload.email);
-
       // 🔥 Send submit feedback event to Kafka
       await this.kafkaProducer.sendMessage(KafkaTopics.SUBMIT_FEEDBACK, {
         ...payload,
+        to: payload.email,
         clientIp,
         deviceInfo,
         currentTime,

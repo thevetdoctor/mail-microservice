@@ -23,7 +23,6 @@ dotenv.config();
 
 @Injectable()
 export class MailService {
-
   constructor(
     private readonly kafkaProducer: ProducerService,
     private readonly mailConfigService: MailConfigService,

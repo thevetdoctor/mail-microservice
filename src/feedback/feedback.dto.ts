@@ -23,4 +23,10 @@ export class FeedbackDTO {
   })
   @IsNotEmpty({ message: 'Message is required' })
   message: string;
+
+  @ApiProperty({
+    example: 'Softafrik',
+    description: 'Optional Sender Identity',
+  })
+  from: string;
 }
