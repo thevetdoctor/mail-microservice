@@ -14,6 +14,7 @@ export const BLACKLISTED_TOKENS = 'BLACKLISTED_TOKENS';
 export const TWO_FACTOR_TOKEN_REPOSITORY = 'TWO_FACTOR_TOKEN_REPOSITORY';
 export const RESET_TOKEN_REPOSITORY = 'RESET_TOKEN_REPOSITORY';
 export const MAIL_CONFIG_REPOSITORY = 'MAIL_CONFIG_REPOSITORY';
+export const SUBSCRIPTION_REPOSITORY = 'SUBSCRIPTION_REPOSITORY';
 
 export const PASSWORD_MIN_LENGTH = 8;
 export const PASSWORD_MAX_LENGTH = 16;
@@ -77,3 +78,12 @@ export enum KafkaTopics {
 export const VAPID_PUBLIC_KEY = process.env.VAPID_PUBLIC_KEY ?? 'Not Supplied';
 export const VAPID_PRIVATE_KEY =
   process.env.VAPID_PRIVATE_KEY ?? 'Not Supplied';
+
+export const redisHost = process.env.REDIS_HOST || 'localhost';
+export const redisPort = process.env.REDIS_PORT
+  ? Number(process.env.REDIS_PORT)
+  : 6379;
+export const redisPassword = process.env.REDIS_PASSWORD || undefined;
+export const cacheTtl = process.env.CACHE_TTL
+  ? Number(process.env.CACHE_TTL)
+  : 30000;

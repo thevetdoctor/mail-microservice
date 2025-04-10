@@ -2,7 +2,9 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Get,
   HttpStatus,
+  Inject,
   Post,
   Req,
   Res,
@@ -10,37 +12,41 @@ import {
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { NotificationService } from './notification.service';
 import { response } from 'oba-http-response';
-import { Response } from 'express';
-import { SamplePushDTO } from 'src/utils';
+import { Request, Response } from 'express';
+import { getIdentity } from 'src/utils';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
+import { SamplePushDTO, SampleSubscriptionDTO } from './notification.dto';
 
 @Controller('notification')
 @ApiBearerAuth('JWT')
 export class NotificationController {
-  private subscriptions: any[] = []; // temp in-memory store
-  constructor(private readonly notificationService: NotificationService) {}
+  constructor(
+    private readonly notificationService: NotificationService,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
+  ) {}
 
   @Post('subscribe')
-  subscribe(@Body() body: any, @Res() res: Response) {
+  async subscribe(
+    @Body() body: SampleSubscriptionDTO,
+    @Req() req: Request,
+    @Res() res: Response,
+  ) {
     try {
-      // Save the subscription to DB or memory
-      const isExisting = this.subscriptions.some(
-        (sub) => sub.endpoint === body.endpoint,
-      );
-
-      if (!isExisting) {
-        this.subscriptions.push(body);
-        console.log('Subscription added:', body.endpoint);
+      const { clientIp, deviceInfo } = getIdentity(req);
+      body.userAgent = deviceInfo;
+      const subscribed = await this.notificationService.subscribe(body);
+      if (subscribed) {
+        return response(
+          res,
+          HttpStatus.CREATED,
+          null,
+          null,
+          'Subscription successful',
+        );
       } else {
-        console.log('Subscription already exists:', body.endpoint);
+        return response(res, HttpStatus.OK, null, null, 'Subscription exist');
       }
-      console.log(this.subscriptions, this.subscriptions.length);
-      return response(
-        res,
-        HttpStatus.CREATED,
-        null,
-        null,
-        'Subscription successful',
-      );
     } catch (e) {
       return response(
         res,
@@ -55,29 +61,10 @@ export class NotificationController {
   @Post('notify')
   async notifyAll(@Body() message: SamplePushDTO, @Res() res: Response) {
     try {
-      const failedSubscriptions: number[] = [];
+      const subscriptions = await this.notificationService.notifyAll(message);
+      console.log('active subscriptions', subscriptions.length);
 
-      for (let i = 0; i < this.subscriptions.length; i++) {
-        const sub = this.subscriptions[i];
-        try {
-          await this.notificationService.sendPushNotification(sub, message);
-        } catch (error) {
-          console.log('error', error.message);
-          if (error.message.includes('expired')) {
-            // Unsubscribe if push failed due to expiration
-            failedSubscriptions.push(i);
-          }
-        }
-      }
-
-      // Remove expired subscriptions in reverse to avoid reindexing issues
-      console.log('failedSubscriptions', failedSubscriptions.length);
-      for (let i = failedSubscriptions.length - 1; i >= 0; i--) {
-        this.subscriptions.splice(failedSubscriptions[i], 1);
-      }
-
-      console.log('active subscriptions', this.subscriptions.length);
-      if (!this.subscriptions.length) {
+      if (!subscriptions.length) {
         throw new BadRequestException('No active subscriptions available');
       }
       return response(
@@ -85,7 +72,29 @@ export class NotificationController {
         HttpStatus.CREATED,
         null,
         null,
-        `${this.subscriptions.length} Push notification(s) sent successfully`,
+        `${subscriptions.length} Push notification(s) sent successfully`,
+      );
+    } catch (e) {
+      return response(
+        res,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        null,
+        `Push notification error: ${e.message}`,
+        e.message,
+      );
+    }
+  }
+
+  @Get('subscriptions')
+  async getSubscriptions(@Res() res: Response) {
+    try {
+      const subscriptions = await this.notificationService.getSubscriptions();
+      return response(
+        res,
+        HttpStatus.OK,
+        null,
+        null,
+        `${subscriptions.length} subscription(s)`,
       );
     } catch (e) {
       return response(
