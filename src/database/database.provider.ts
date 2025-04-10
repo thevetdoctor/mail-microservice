@@ -44,7 +44,7 @@ export const databaseProviders = [
 
       if (process.env.NODE_ENV !== 'test') {
         sequelize = new Sequelize(config.urlDatabase, {
-          logging: false,
+          logging: console.log,
           dialectOptions: {
             ssl: false,
           },
@@ -60,7 +60,7 @@ export const databaseProviders = [
       sequelize.addModels([MailConfigs, Subscriptions]);
 
       try {
-        await sequelize.sync({ alter: true });
+        // await sequelize.sync({ alter: true });
       } catch (err) {
         console.error('Error with DB sync:', err);
       }
