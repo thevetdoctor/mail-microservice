@@ -23,7 +23,16 @@ export class NotificationController {
   subscribe(@Body() body: any, @Res() res: Response) {
     try {
       // Save the subscription to DB or memory
-      this.subscriptions.push(body);
+      const isExisting = this.subscriptions.some(
+        (sub) => sub.endpoint === body.endpoint,
+      );
+
+      if (!isExisting) {
+        this.subscriptions.push(body);
+        console.log('Subscription added:', body.endpoint);
+      } else {
+        console.log('Subscription already exists:', body.endpoint);
+      }
       console.log(this.subscriptions, this.subscriptions.length);
       return response(
         res,
@@ -53,7 +62,7 @@ export class NotificationController {
         try {
           await this.notificationService.sendPushNotification(sub, message);
         } catch (error) {
-          console.log('error', error);
+          console.log('error', error.message);
           if (error.message.includes('expired')) {
             // Unsubscribe if push failed due to expiration
             failedSubscriptions.push(i);
