@@ -41,6 +41,7 @@
     "sequelize-typescript": "^2.1.6",
     "swagger-ui-express": "^5.0.1",
     "ua-parser-js": "^2.0.2",
+    "web-push": "^3.6.7",
     "winston": "^3.17.0"
   },
   "devDependencies": {

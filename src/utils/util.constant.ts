@@ -73,3 +73,7 @@ export enum KafkaTopics {
   USER_SIGNUP = 'user.signup',
   USER_SIGNUP_ERROR = 'user.signup.error',
 }
+
+export const VAPID_PUBLIC_KEY = process.env.VAPID_PUBLIC_KEY ?? 'Not Supplied';
+export const VAPID_PRIVATE_KEY =
+  process.env.VAPID_PRIVATE_KEY ?? 'Not Supplied';

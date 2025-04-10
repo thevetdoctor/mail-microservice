@@ -1,6 +1,6 @@
 import { BadRequestException, HttpStatus } from '@nestjs/common';
 import { UAParser } from 'ua-parser-js';
-import { encryptionKey } from './util.constant';
+import { encryptionKey, VAPID_PUBLIC_KEY } from './util.constant';
 const axios = require('axios');
 const { AES, enc } = require('crypto-js');
 
