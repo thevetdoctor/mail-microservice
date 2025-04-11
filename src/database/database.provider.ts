@@ -48,7 +48,7 @@ export const databaseProviders = [
             dialectOptions: {
               ssl: false,
             },
-            schema: process.env.DB_SCHEMA,
+            schema: dbSchema,
           });
         } else {
           sequelize = new Sequelize({
