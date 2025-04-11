@@ -19,7 +19,7 @@ import { AppCacheModule } from './cache/cache.module';
     KafkaModule,
     DatabaseModule,
     NotificationModule,
-    AppCacheModule,
+    // AppCacheModule,
   ],
   controllers: [AppController],
   providers: [AppService, ConsumerService, MailService, ProducerService],
