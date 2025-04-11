@@ -79,7 +79,7 @@ export const VAPID_PUBLIC_KEY = process.env.VAPID_PUBLIC_KEY ?? 'Not Supplied';
 export const VAPID_PRIVATE_KEY =
   process.env.VAPID_PRIVATE_KEY ?? 'Not Supplied';
 
-export const redisHost = process.env.REDIS_HOST || 'localhost';
+export const redisHost = process.env.REDIS_HOST || '172.17.0.1';
 export const redisPort = process.env.REDIS_PORT
   ? Number(process.env.REDIS_PORT)
   : 6379;
