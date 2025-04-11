@@ -32,33 +32,32 @@ export const databaseProviders = [
       }
       let sequelize: any;
       try {
+        console.log('DB_LOGGING', DB_LOGGING);
+        console.log('NODE_ENV', NODE_ENV);
 
-      console.log('DB_LOGGING', DB_LOGGING);
-      console.log('NODE_ENV', NODE_ENV);
+        (async function ensureSchemaExists() {
+          const sequelize = new Sequelize(dbUrl, { logging: false });
+          await sequelize.query(`CREATE SCHEMA IF NOT EXISTS "${dbSchema}";`);
+          await sequelize.close();
+          console.log('ensureSchemaExists Done');
+        })();
 
-      (async function ensureSchemaExists() {
-        const sequelize = new Sequelize(dbUrl, { logging: false });
-        await sequelize.query(`CREATE SCHEMA IF NOT EXISTS "${dbSchema}";`);
-        await sequelize.close();
-        console.log('ensureSchemaExists Done');
-      })();
-
-      if (process.env.NODE_ENV !== 'test') {
-        sequelize = new Sequelize(config.urlDatabase, {
-          logging: false,
-          dialectOptions: {
-            ssl: false,
-          },
-          schema: process.env.DB_SCHEMA,
-        });
-      } else {
-        sequelize = new Sequelize({
-          dialect: 'sqlite',
-          storage: ':memory:',
-          logging: false,
-        });
-      }
-      sequelize.addModels([MailConfigs, Subscriptions]);
+        if (process.env.NODE_ENV !== 'test') {
+          sequelize = new Sequelize(config.urlDatabase, {
+            logging: false,
+            dialectOptions: {
+              ssl: false,
+            },
+            schema: process.env.DB_SCHEMA,
+          });
+        } else {
+          sequelize = new Sequelize({
+            dialect: 'sqlite',
+            storage: ':memory:',
+            logging: false,
+          });
+        }
+        sequelize.addModels([MailConfigs, Subscriptions]);
 
         // await sequelize.sync({ alter: true });
       } catch (err) {
