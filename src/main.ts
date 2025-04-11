@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import {
   appName,
   cacheTtl,
+  dbUrl,
   kafkaUrl,
   mailPort,
   mailSMtpServer,
@@ -47,6 +48,7 @@ async function bootstrap() {
     console.log('REDIS_PASSWORD:', process.env.REDIS_PASSWORD, redisPassword);
     console.log('CACHE_TTL:', process.env.CACHE_TTL, cacheTtl);
     console.log('KAFKA_URL:', kafkaUrl ? kafkaUrl : 'Not Supplied');
+    console.log('DB_URL:', dbUrl ? dbUrl : 'Not Supplied');
     console.log(
       'MAIL_SMTP_SERVER:',
       mailSMtpServer ? mailSMtpServer : 'Not Supplied',

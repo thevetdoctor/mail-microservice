@@ -37,10 +37,10 @@ class SampleSubscription {
   @ApiProperty({ type: SubscriptionKeys })
   keys: SubscriptionKeys;
 
-  @ApiProperty()
+  @ApiProperty({ example: 'aff2d669-583c-4320-821d-9666affb579a' })
   userId?: string;
 
-  @ApiProperty()
+  @ApiProperty({ example: 'Chrome on macOS (Macintosh)' })
   userAgent: string;
 
   @ApiProperty({ example: 'aff2d669-583c-4320-821d-9666affb579a' })

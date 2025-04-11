@@ -65,7 +65,7 @@ export class NotificationService {
         return true;
       } else {
         console.log('Subscription already exists:', endpoint);
-        console.log(allSubscriptions.length);
+        console.log('subscriptions count', allSubscriptions.length);
         return false;
       }
     } catch (error) {
@@ -128,7 +128,8 @@ export class NotificationService {
     try {
       // Send notification
       const payloadStr = JSON.stringify({ payload });
-      console.log('subscription', subscription, payloadStr);
+      console.log('subscription endpoint =>', subscription.endpoint);
+      console.log('subscription payload =>', payloadStr);
       const push = await webPush.sendNotification(subscription, payloadStr);
       return push;
     } catch (error) {

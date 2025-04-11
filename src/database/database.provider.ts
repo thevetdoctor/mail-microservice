@@ -44,7 +44,7 @@ export const databaseProviders = [
 
       if (process.env.NODE_ENV !== 'test') {
         sequelize = new Sequelize(config.urlDatabase, {
-          logging: console.log,
+          logging: false,
           dialectOptions: {
             ssl: false,
           },
