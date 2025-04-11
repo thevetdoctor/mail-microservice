@@ -17,7 +17,7 @@ import { NotificationModule } from './notification/notification.module';
     MailModule,
     FeedbackModule,
     KafkaModule,
-    DatabaseModule,
+    // DatabaseModule,
     NotificationModule,
     // AppCacheModule,
   ],
