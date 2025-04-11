@@ -31,6 +31,7 @@ export const databaseProviders = [
           break;
       }
       let sequelize: any;
+      try {
 
       console.log('DB_LOGGING', DB_LOGGING);
       console.log('NODE_ENV', NODE_ENV);
@@ -59,7 +60,6 @@ export const databaseProviders = [
       }
       sequelize.addModels([MailConfigs, Subscriptions]);
 
-      try {
         // await sequelize.sync({ alter: true });
       } catch (err) {
         console.error('Error with DB sync:', err);
