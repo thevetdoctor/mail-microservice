@@ -29,7 +29,7 @@ export const expiryDuration = process.env.JWT_DURATION_EXPIRY
   : '1h';
 export const dbSchema = process.env.DB_SCHEMA ? process.env.DB_SCHEMA : 'mail';
 export const dbUrl =
-  process.env.DB_URL ?? 'postgres://admin:strange@178.128.32.101:5432/micro-db';
+  process.env.DB_URL || 'postgres://admin:strange@178.128.32.101:5432/micro-db';
 export const apiGatewayUrl =
   process.env.API_GATEWAY_URL ?? 'https://gateway.softafrik.com';
 export const redirectUrl = process.env.REDIRECT_URL ?? 'https://softafrik.com';
