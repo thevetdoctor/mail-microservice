@@ -163,3 +163,40 @@ export const encrypted = (data) => {
 export const decrypted = (data) => {
   return AES.decrypt(data, encryptionKey).toString(enc.Utf8);
 };
+
+export function parseDbUrl(url: string) {
+  try {
+    if (!url) {
+      throw new Error(
+        'DB_URL is not defined. Please check your environment variables.',
+      );
+    }
+
+    const urlPattern =
+      /^(?<protocol>\w+):\/\/(?<username>[^:]+):(?<password>[^@]+)@(?<host>[^:/]+)(?::(?<port>\d+))?\/(?<database>.+)$/;
+    const match = url.match(urlPattern);
+
+    if (!match || !match.groups) {
+      throw new Error(`Invalid DB_URL format: ${url}`);
+    }
+
+    const { protocol, username, password, host, port, database } = match.groups;
+
+    if (protocol !== 'postgres') {
+      throw new Error(
+        `Unsupported protocol: ${protocol}. Expected 'postgres'.`,
+      );
+    }
+
+    return {
+      host,
+      port: port ? parseInt(port, 10) : 5432,
+      username,
+      password,
+      database,
+    };
+  } catch (error) {
+    console.error(`❌ Database URL Parsing Error: ${error.message}`);
+    process.exit(1); // Stop execution if DB_URL is invalid
+  }
+};

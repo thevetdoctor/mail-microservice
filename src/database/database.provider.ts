@@ -6,6 +6,7 @@ import {
   DB_LOGGING,
   DEVELOPMENT,
   NODE_ENV,
+  parseDbUrl,
   PRODUCTION,
   SEQUELIZE,
   TEST,
@@ -32,6 +33,8 @@ export const databaseProviders = [
       }
       let sequelize: any;
       try {
+        const prasedUrl = parseDbUrl(dbUrl)
+        console.log('prasedUrl', prasedUrl)
         console.log('DB_LOGGING', DB_LOGGING);
         console.log('NODE_ENV', NODE_ENV);
 
@@ -59,7 +62,7 @@ export const databaseProviders = [
         }
         sequelize.addModels([MailConfigs, Subscriptions]);
 
-        // await sequelize.sync({ alter: true });
+        await sequelize.sync({ alter: true });
       } catch (err) {
         console.error('Error with DB sync:', err);
       }
