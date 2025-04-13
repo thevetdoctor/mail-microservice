@@ -11,7 +11,7 @@ import { ApiBearerAuth } from '@nestjs/swagger';
 import { NotificationService } from './notification.service';
 import { response } from 'oba-http-response';
 import { Response } from 'express';
-import { SamplePushDTO } from 'src/utils';
+import { SamplePushDTO } from './notification.dto';
 
 @Controller('notification')
 @ApiBearerAuth('JWT')

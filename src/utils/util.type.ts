@@ -11,16 +11,3 @@ export class BaseResponseTypeDTO {
   @ApiProperty()
   message: string;
 }
-
-class PushMessage {
-  @ApiProperty({ example: 'New Notification' })
-  title: string;
-
-  @ApiProperty({ example: 'You have an update!' })
-  message: string;
-}
-
-export class SamplePushDTO {
-  @ApiProperty({ type: PushMessage })
-  message: PushMessage;
-}
