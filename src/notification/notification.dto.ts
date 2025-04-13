@@ -6,6 +6,9 @@ class PushMessage {
 
   @ApiProperty({ example: 'You have an update!' })
   message: string;
+
+  @ApiProperty({ example: 'https://www.google.com' })
+  redirectUrl: string;
 }
 
 export class SamplePushDTO {
