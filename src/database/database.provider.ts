@@ -11,6 +11,7 @@ import {
   TEST,
 } from 'src/utils';
 import { MailConfigs } from 'src/mail/mailconfig/mailconfig.entity';
+import { Subscriptions } from 'src/notification/notification.entity';
 
 export const databaseProviders = [
   {
@@ -56,7 +57,7 @@ export const databaseProviders = [
           logging: false,
         });
       }
-      sequelize.addModels([MailConfigs]);
+      sequelize.addModels([MailConfigs, Subscriptions]);
 
       try {
         await sequelize.sync({ alter: true });
