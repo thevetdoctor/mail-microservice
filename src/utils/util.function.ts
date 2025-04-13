@@ -199,4 +199,4 @@ export function parseDbUrl(url: string) {
     console.error(`❌ Database URL Parsing Error: ${error.message}`);
     process.exit(1); // Stop execution if DB_URL is invalid
   }
-};
+}

@@ -10,7 +10,7 @@ import { KafkaModule } from './kafka/kafka.module';
 import { GatewayAuthMiddleware, LoggerMiddleware } from './middlewares';
 import { DatabaseModule } from './database/database.module';
 import { NotificationModule } from './notification/notification.module';
-// import { AppCacheModule } from './cache/cache.module';
+import { AppCacheModule } from './cache/cache.module';
 
 @Module({
   imports: [
@@ -19,7 +19,7 @@ import { NotificationModule } from './notification/notification.module';
     KafkaModule,
     DatabaseModule,
     NotificationModule,
-    // AppCacheModule,
+    AppCacheModule,
   ],
   controllers: [AppController],
   providers: [AppService, ConsumerService, MailService, ProducerService],

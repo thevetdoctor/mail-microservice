@@ -33,12 +33,12 @@ export const databaseProviders = [
       }
       let sequelize: any;
       try {
-        const prasedUrl = parseDbUrl(dbUrl)
-        console.log('prasedUrl', prasedUrl)
+        const prasedUrl = parseDbUrl(dbUrl);
+        console.log('prasedUrl', prasedUrl);
         console.log('DB_LOGGING', DB_LOGGING);
         console.log('NODE_ENV', NODE_ENV);
 
-        (async function ensureSchemaExists() {
+        await (async function ensureSchemaExists() {
           const sequelize = new Sequelize(dbUrl, { logging: false });
           await sequelize.query(`CREATE SCHEMA IF NOT EXISTS "${dbSchema}";`);
           await sequelize.close();
@@ -62,9 +62,14 @@ export const databaseProviders = [
         }
         sequelize.addModels([MailConfigs, Subscriptions]);
 
-        await sequelize.sync({ alter: true });
+        try {
+          await sequelize.sync({ alter: true });
+        } catch (err) {
+          console.error('DB sync failed:', err);
+        }
       } catch (err) {
         console.error('Error with DB sync:', err);
+        throw err; // Crash intentionally to let Docker logs show it
       }
       return sequelize;
     },
