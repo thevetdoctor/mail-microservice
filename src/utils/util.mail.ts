@@ -9,6 +9,7 @@ export const mailTemplates = (
   subject = 'Notification'
 ) => {
   deviceInfo = deviceInfo.replaceAll('undefined', '')
+  clientIp = deviceInfo.includes('undefined') ? 'Unknown' : clientIp;
   switch (topic) {
     case 'user.signup':
       return {
