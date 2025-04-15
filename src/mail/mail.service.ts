@@ -67,16 +67,18 @@ export class MailService {
         currentTime,
         from,
         to,
+        subject,
         message,
         template,
       } = msg;
       const transporter = await this.createTransporter(apiUser);
-      const { subject, text, html } = mailTemplates(
+      const { text, html } = mailTemplates(
         topic,
         clientIp,
         deviceInfo,
         currentTime,
         template || message,
+        subject
       );
       await this.kafkaProducer.sendMessage(KafkaTopics.MAIL_SENT, {
         email,

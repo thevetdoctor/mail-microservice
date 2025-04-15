@@ -18,6 +18,12 @@ export class MailSendDTO {
   to: string;
 
   @ApiProperty({
+    example: 'Notification',
+    description: 'Subject',
+  })
+  subject?: string;
+
+  @ApiProperty({
     example: 'hello, i need some service',
     description: 'Mail message',
   })

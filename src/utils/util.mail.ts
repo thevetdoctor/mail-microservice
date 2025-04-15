@@ -6,7 +6,9 @@ export const mailTemplates = (
   deviceInfo: string,
   currentTime: string,
   text?: string,
+  subject = 'Notification'
 ) => {
+  deviceInfo = deviceInfo.replaceAll('undefined', '')
   switch (topic) {
     case 'user.signup':
       return {
@@ -31,9 +33,9 @@ export const mailTemplates = (
 
     default:
       return {
-        subject: 'Notification',
+        subject: `${subject}`,
         text: `You have received a new notification. \n Location: ${clientIp}. \n Device: ${deviceInfo}. \n Time: ${currentTime}`,
-        html: htmlDefaultTemplate(text, clientIp, deviceInfo, currentTime),
+        html: htmlDefaultTemplate(text, clientIp, deviceInfo, currentTime, subject),
       };
   }
 };
@@ -118,12 +120,13 @@ const htmlDefaultTemplate = (
   clientIp: string,
   deviceInfo: string,
   currentTime: string,
+  subject: string
 ) => `
 <!DOCTYPE html>
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Notification</title>
+  <title>${subject}</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -156,7 +159,7 @@ const htmlDefaultTemplate = (
 </head>
 <body>
   <div class="container">
-    <h2>Notification</h2><br>
+    <h2>${subject}</h2><br>
     <p> ${text} </p><br>
     <p class="footer"><strong>Location:</strong> ${clientIp}</p>
     <p class="footer"><strong>Time:</strong> ${currentTime}</p>
