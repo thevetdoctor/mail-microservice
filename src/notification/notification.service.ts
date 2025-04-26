@@ -7,7 +7,7 @@ import { Subscriptions } from './notification.entity';
 
 // const vapidKeys = webPush.generateVAPIDKeys();
 const vapidKeys = `${VAPID_PUBLIC_KEY}: ${VAPID_PRIVATE_KEY}`;
-console.log('vapidKeys', vapidKeys);
+// console.log('vapidKeys', vapidKeys);
 
 webPush.setVapidDetails(
   'mailto:consultoba@gmail.com',
