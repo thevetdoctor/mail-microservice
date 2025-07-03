@@ -25,6 +25,6 @@ import { NotificationModule } from './notification/notification.module';
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(LoggerMiddleware).forRoutes('*'); // Protect all routes
-    consumer.apply(GatewayAuthMiddleware).forRoutes('*'); // Protect all routes
+    // consumer.apply(GatewayAuthMiddleware).forRoutes('*'); // Protect all routes
   }
 }
