@@ -1,0 +1,237 @@
+service: mail-microservice
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  region: us-east-1
+  stage: ${opt:stage, 'dev'}
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:Query
+            - dynamodb:PutItem
+            - dynamodb:GetItem
+            - dynamodb:DeleteItem
+            - dynamodb:Scan
+            - dynamodb:BatchWriteItem
+          Resource:
+            - !GetAtt SubscriptionsTable.Arn
+            - !Join ['/', [!GetAtt SubscriptionsTable.Arn, 'index/*']]
+            - !GetAtt MailConfigsTable.Arn
+            - !Join ['/', [!GetAtt MailConfigsTable.Arn, 'index/*']]
+            - !GetAtt LoginErrorsTable.Arn
+            - !Join ['/', [!GetAtt LoginErrorsTable.Arn, 'index/*']]
+        - Effect: Allow
+          Action:
+            - events:PutEvents
+          Resource:
+            - !Sub arn:aws:events:${AWS::Region}:${AWS::AccountId}:event-bus/${self:custom.eventBusName}
+        - Effect: Allow
+          Action:
+            - sqs:SendMessage
+          Resource:
+            - !GetAtt EventProcessorDLQ.Arn
+        - Effect: Allow
+          Action:
+            - ses:SendEmail
+            - ses:SendRawEmail
+          Resource:
+            - '*'
+  environment:
+    SUBSCRIPTIONS_TABLE: ${self:custom.subscriptionsTable}
+    MAIL_CONFIGS_TABLE: ${self:custom.mailConfigsTable}
+    LOGIN_ERRORS_TABLE: ${self:custom.loginErrorsTable}
+    EVENT_BUS_NAME: ${self:custom.eventBusName}
+    ENCRYPTION_KEY: ${ssm:/mail-service/${self:provider.stage}/encryption-key, ''}
+    VAPID_PUBLIC_KEY: ${ssm:/mail-service/${self:provider.stage}/vapid-public-key, ''}
+    VAPID_PRIVATE_KEY: ${ssm:/mail-service/${self:provider.stage}/vapid-private-key, ''}
+    VAPID_EMAIL: ${env:VAPID_EMAIL, ''}
+    ADMIN_EMAIL: ${env:ADMIN_EMAIL, ''}
+    MAX_ERRORS: ${env:MAX_ERRORS, '10'}
+    ERROR_WINDOW_MS: ${env:ERROR_WINDOW_MS, '60000'}
+    JWT_SECRET: ${ssm:/mail-service/${self:provider.stage}/jwt-secret, ''}
+    SES_FROM_EMAIL: ${env:SES_FROM_EMAIL, 'noreply@hobar.link'}
+  httpApi:
+    cors:
+      allowedOrigins:
+        - '*'
+      allowedHeaders:
+        - Content-Type
+        - Authorization
+      allowedMethods:
+        - POST
+        - OPTIONS
+    authorizers:
+      jwtAuthorizer:
+        type: request
+        functionName: authorizer
+        enableSimpleResponses: true
+        identitySource: $request.header.Authorization
+
+plugins:
+  - serverless-esbuild
+  - serverless-offline
+
+custom:
+  subscriptionsTable: Subscriptions-${self:provider.stage}
+  mailConfigsTable: MailConfigs-${self:provider.stage}
+  loginErrorsTable: LoginErrors-${self:provider.stage}
+  eventBusName: mail-service-bus-${self:provider.stage}
+  esbuild:
+    bundle: true
+    minify: false
+    sourcemap: true
+    exclude:
+      - '@aws-sdk/*'
+    target: node20
+    platform: node
+
+functions:
+  authorizer:
+    handler: src/handlers/authorizer.handler
+    memorySize: 128
+    timeout: 5
+
+  subscribe:
+    handler: src/handlers/subscribe.handler
+    memorySize: 256
+    timeout: 10
+    events:
+      - httpApi:
+          path: /notification/subscribe
+          method: POST
+
+  feedback:
+    handler: src/handlers/feedback.handler
+    memorySize: 256
+    timeout: 10
+    events:
+      - httpApi:
+          path: /feedback
+          method: POST
+
+  mailSend:
+    handler: src/handlers/mailSend.handler
+    memorySize: 256
+    timeout: 10
+    events:
+      - httpApi:
+          path: /mail/send
+          method: POST
+          authorizer:
+            name: jwtAuthorizer
+
+  eventProcessor:
+    handler: src/handlers/eventProcessor.handler
+    memorySize: 256
+    timeout: 30
+    destinations:
+      onFailure:
+        type: sqs
+        arn: !GetAtt EventProcessorDLQ.Arn
+    events:
+      - eventBridge:
+          eventBus: ${self:custom.eventBusName}
+          pattern:
+            source:
+              - mail-service
+            detail-type:
+              - user.login
+              - user.signup
+              - submit.feedback
+              - mail.send
+              - user.login.error
+
+  notifyAll:
+    handler: src/handlers/notifyAll.handler
+    memorySize: 256
+    timeout: 60
+
+resources:
+  Resources:
+    SubscriptionsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.subscriptionsTable}
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+          - AttributeName: endpoint
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        GlobalSecondaryIndexes:
+          - IndexName: endpoint-index
+            KeySchema:
+              - AttributeName: endpoint
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+
+    MailConfigsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.mailConfigsTable}
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+          - AttributeName: email
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        GlobalSecondaryIndexes:
+          - IndexName: email-index
+            KeySchema:
+              - AttributeName: email
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+
+    LoginErrorsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.loginErrorsTable}
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+          - AttributeName: timestamp
+            AttributeType: N
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+          - AttributeName: timestamp
+            KeyType: RANGE
+        TimeToLiveSpecification:
+          AttributeName: ttl
+          Enabled: true
+
+    EventProcessorDLQ:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: mail-service-event-processor-dlq-${self:provider.stage}
+        MessageRetentionPeriod: 1209600
+        VisibilityTimeout: 60
+
+    EventProcessorDLQAlarm:
+      Type: AWS::CloudWatch::Alarm
+      Properties:
+        AlarmName: mail-service-dlq-messages-${self:provider.stage}
+        AlarmDescription: Alert when messages appear in the Event Processor DLQ
+        Namespace: AWS/SQS
+        MetricName: ApproximateNumberOfMessagesVisible
+        Dimensions:
+          - Name: QueueName
+            Value: !GetAtt EventProcessorDLQ.QueueName
+        Statistic: Sum
+        Period: 60
+        EvaluationPeriods: 1
+        Threshold: 0
+        ComparisonOperator: GreaterThanThreshold
+        TreatMissingData: notBreaching

@@ -2,6 +2,9 @@
 /dist
 /node_modules
 /build
+/serverless/node_modules
+/serverless/.esbuild
+/serverless/.serverless
 mail_microservice_logss
 
 # Logs

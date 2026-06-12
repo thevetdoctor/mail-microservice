@@ -1,0 +1,38 @@
+{
+  "name": "mail-microservice-serverless",
+  "version": "1.0.0",
+  "description": "Serverless Lambda refactor of the mail microservice",
+  "main": "src/handlers/index.ts",
+  "scripts": {
+    "test": "jest",
+    "test:integration": "jest --config jest.integration.config.ts",
+    "deploy": "serverless deploy",
+    "offline": "serverless offline start"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.600.0",
+    "@aws-sdk/client-eventbridge": "^3.600.0",
+    "@aws-sdk/client-ses": "^3.1067.0",
+    "@aws-sdk/lib-dynamodb": "^3.600.0",
+    "crypto-js": "^4.2.0",
+    "nodemailer": "^6.9.14",
+    "uuid": "^9.0.1",
+    "web-push": "^3.6.7"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.162",
+    "@types/crypto-js": "^4.2.2",
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.14.0",
+    "@types/nodemailer": "^6.4.15",
+    "@types/uuid": "^9.0.8",
+    "@types/web-push": "^3.6.3",
+    "fast-check": "^3.19.0",
+    "jest": "^29.7.0",
+    "serverless": "^3.38.0",
+    "serverless-esbuild": "^1.52.1",
+    "serverless-offline": "^13.6.0",
+    "ts-jest": "^29.1.5",
+    "typescript": "^5.5.0"
+  }
+}
